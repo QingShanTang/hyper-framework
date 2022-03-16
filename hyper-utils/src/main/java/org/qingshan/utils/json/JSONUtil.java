@@ -1,5 +1,6 @@
 package org.qingshan.utils.json;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,11 @@ public class JSONUtil {
     @SneakyThrows
     public static <T> T parseObject(String text, Class<T> clazz) {
         return objectMapper.readValue(text, clazz);
+    }
+
+    @SneakyThrows
+    public static <T> T parseObject(String text, TypeReference<T> type) {
+        return objectMapper.readValue(text, type);
     }
 
 }
