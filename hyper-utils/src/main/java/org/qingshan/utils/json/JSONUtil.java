@@ -13,4 +13,9 @@ public class JSONUtil {
         return objectMapper.writeValueAsString(o);
     }
 
+    @SneakyThrows
+    public static <T> T parseObject(String text, Class<T> clazz) {
+        return objectMapper.readValue(text, clazz);
+    }
+
 }
