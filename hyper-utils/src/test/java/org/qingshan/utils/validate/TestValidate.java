@@ -11,6 +11,6 @@ public class TestValidate {
     public void testValidateObj() {
         User user = new User();
         ValidateResult result = ValidatorUtil.validator(user);
-        log.info(JSONUtil.toJSONStringWithFormat(result));
+        JSONUtil.printJSONStringWithFormat(result);
     }
 }

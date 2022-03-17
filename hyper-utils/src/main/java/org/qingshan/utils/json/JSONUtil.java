@@ -20,6 +20,11 @@ public class JSONUtil {
     }
 
     @SneakyThrows
+    public static void printJSONStringWithFormat(Object o) {
+        log.info(toJSONStringWithFormat(o));
+    }
+
+    @SneakyThrows
     public static <T> T parseObject(String text, Class<T> clazz) {
         return objectMapper.readValue(text, clazz);
     }
