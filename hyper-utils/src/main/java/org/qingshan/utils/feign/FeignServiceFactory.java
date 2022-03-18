@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.qingshan.utils.json.JSONUtil;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -26,7 +27,10 @@ public class FeignServiceFactory {
         try {
             Properties properties = new Properties();
             //先加载默认的配置文件
-            properties.load(this.getClass().getClassLoader().getResourceAsStream("config/default/feign.properties"));
+            InputStream in = this.getClass().getClassLoader().getResourceAsStream("feign-default.properties");
+            if (null != in) {
+                properties.load(in);
+            }
             //如果存在客户配置,则覆盖默认配置的属性
             if (StringUtils.isNotBlank(configProperties.getConfigPath())) {
                 properties.load(this.getClass().getClassLoader().getResourceAsStream(configProperties.getConfigPath()));
