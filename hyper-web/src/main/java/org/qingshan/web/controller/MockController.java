@@ -4,17 +4,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.qingshan.pojo.web.MockCallContext;
 import org.qingshan.pojo.web.MockCallResult;
 import org.qingshan.utils.json.JSONUtil;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/mock")
 public class MockController {
 
-    @GetMapping("/call")
-    public MockCallResult call(MockCallContext context) {
+    @PostMapping("/call")
+    public MockCallResult call(@RequestBody MockCallContext context) {
         log.info("Input params->context:{}", JSONUtil.toJSONString(context));
         MockCallResult result = new MockCallResult();
         result.setData(context.getData());
