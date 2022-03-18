@@ -1,4 +1,4 @@
-package org.qingshan.web.controller.pojo;
+package org.qingshan.pojo.web;
 
 import lombok.Data;
 

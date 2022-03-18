@@ -1,9 +1,9 @@
 package org.qingshan.web.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.qingshan.pojo.web.MockCallContext;
+import org.qingshan.pojo.web.MockCallResult;
 import org.qingshan.utils.json.JSONUtil;
-import org.qingshan.web.controller.pojo.MockCallContext;
-import org.qingshan.web.controller.pojo.MockCallResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

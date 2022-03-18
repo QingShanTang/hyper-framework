@@ -11,6 +11,7 @@
     <modules>
         <module>hyper-utils</module>
         <module>hyper-web</module>
+        <module>hyper-pojo</module>
     </modules>
 
     <properties>
