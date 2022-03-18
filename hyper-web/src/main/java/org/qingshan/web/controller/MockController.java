@@ -2,8 +2,8 @@ package org.qingshan.web.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.qingshan.utils.json.JSONUtil;
-import org.qingshan.web.controller.pojo.MockContext;
-import org.qingshan.web.controller.pojo.MockResult;
+import org.qingshan.web.controller.pojo.MockCallContext;
+import org.qingshan.web.controller.pojo.MockCallResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class MockController {
 
     @GetMapping("/call")
-    public MockResult call(MockContext context) {
+    public MockCallResult call(MockCallContext context) {
         log.info("Input params->context:{}", JSONUtil.toJSONString(context));
-        MockResult result = new MockResult();
+        MockCallResult result = new MockCallResult();
         result.setData(context.getData());
         if (context.getIfError()) {
             if (context.getIfThrow()) {
