@@ -1,10 +1,12 @@
 package org.qingshan.utils.feign;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.qingshan.pojo.web.MockCallContext;
 import org.qingshan.pojo.web.MockCallResult;
 import org.qingshan.utils.json.JSONUtil;
 
+@Slf4j
 public class TestFeign {
 
     @Test
