@@ -2,3 +2,6 @@ server:
   port: 9999
   servlet:
     context-path: /hyper
+spring:
+  profiles:
+    include: dao

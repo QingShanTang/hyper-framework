@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <properties resource="jdbc.properties"/>
+    <context id="ProjectTables" targetRuntime="MyBatis3">
+        <!--覆盖生成XML文件-->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+        <!--实现Serializable接口-->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <!--生成toString方法-->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <commentGenerator type="org.qingshan.dao.utils.MyCommentGenerator">
+            <!--删除注释,默认是false-->
+            <property name="suppressAllComments" value="true"/>
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+        <jdbcConnection driverClass="${jdbc.driverClass}"
+                        connectionURL="${jdbc.connectionURL}"
+                        userId="${jdbc.userId}"
+                        password="${jdbc.password}">
+        </jdbcConnection>
+        <javaTypeResolver>
+            <!--控制是否强制DECIMAL和NUMERIC类型的字段转换为Java类型的java.math.BigDecimal,默认值为false-->
+            <!--默认情况下的转换规则为：-->
+            <!--如果精度>0或者长度>18，就会使用java.math.BigDecimal-->
+            <!--如果精度=0并且10<=长度<=18，就会使用java.lang.Long-->
+            <!--如果精度=0并且5<=长度<=9，就会使用java.lang.Integer-->
+            <!--如果精度=0并且长度<5，就会使用java.lang.Short-->
+            <!--如果精度>0,则统一使用java.math.BigDecimal-->
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        <javaModelGenerator
+                targetPackage="org.qingshan.dao.entity"
+                targetProject="hyper-dao/src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <!--对字符串类型字段的set方法自动进行修剪,默认false-->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <sqlMapGenerator
+                targetPackage="mapper"
+                targetProject="hyper-dao/src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="org.qingshan.dao.mapper"
+                             targetProject="hyper-dao/src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table tableName="t_user" domainObjectName="User">
+            <generatedKey column="id" sqlStatement="JDBC" identity="true"/>
+        </table>
+
+    </context>
+</generatorConfiguration>
