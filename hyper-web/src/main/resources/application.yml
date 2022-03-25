@@ -1,10 +1,11 @@
 hyper:
   logging:
-    home: ${user.home}/hyper/logs
+    home: ${user.home}/hyper/${hyper.env}/logs
 server:
   port: 9999
   servlet:
     context-path: /hyper
 spring:
   profiles:
+    active: @env@
     include: dao
