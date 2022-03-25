@@ -1,6 +1,6 @@
 hyper:
   logging:
-    home: ${user.home}/logs/hyper
+    home: ${user.home}/hyper/logs
 server:
   port: 9999
   servlet:

@@ -2,7 +2,7 @@
 <configuration>
     <!-- 存放路径 -->
     <springProperty scope="context" name="log.path" source="hyper.logging.home"
-                    defaultValue="${user.home}/logs/hyper"/>
+                    defaultValue="${user.home}/hyper/logs"/>
 
     <!-- 普通输出格式 -->
     <property name="log.pattern"
