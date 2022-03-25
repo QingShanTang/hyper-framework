@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 存放路径 -->
+    <springProperty scope="context" name="log.path" source="hyper.logging.home"
+                    defaultValue="${user.home}/logs/hyper"/>
+
+    <!-- 普通输出格式 -->
+    <property name="log.pattern"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%logger{10},%method,%line] - %msg%n"/>
+
+    <!-- 控制台输出格式 -->
+    <property name="log.console.pattern"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%logger{0},%method,%line] - %msg%n"/>
+
+    <!-- error输出格式 -->
+    <property name="log.error.pattern"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%logger{100},%method,%line] - %msg%n"/>
+
+    <!-- 控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${log.console.pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 系统日志输出 -->
+    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/sys.log</file>
+        <!-- 循环政策：基于时间创建日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/%d{yyyy-MM,aux}/sys.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <MaxHistory>60</MaxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="RollingFileError" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/sys-error.log</file>
+        <!-- 循环政策：基于时间创建日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/%d{yyyy-MM,aux}/sys-error.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <MaxHistory>60</MaxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.error.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 过滤的级别 -->
+            <level>ERROR</level>
+            <!-- 匹配时的操作：接收（记录） -->
+            <onMatch>ACCEPT</onMatch>
+            <!-- 不匹配时的操作：拒绝（不记录） -->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!--目录级别控制-->
+<!--    <logger name="org.springframework" level="warn"/>-->
+
+    <!--系统操作日志-->
+    <root level="info">
+        <appender-ref ref="console"/>
+        <appender-ref ref="RollingFile"/>
+        <appender-ref ref="RollingFileError"/>
+    </root>
+
+</configuration>
