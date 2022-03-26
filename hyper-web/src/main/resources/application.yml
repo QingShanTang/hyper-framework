@@ -8,4 +8,4 @@ server:
 spring:
   profiles:
     active: @env@
-    include: dao
+    include: dao,@env@-dao

@@ -5,11 +5,12 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="income" jdbcType="DOUBLE" property="income" />
+    <result column="if_adult" jdbcType="INTEGER" property="ifAdult" />
     <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
     <result column="created_date" jdbcType="BIGINT" property="createdDate" />
     <result column="last_modified_by" jdbcType="VARCHAR" property="lastModifiedBy" />
     <result column="last_modified_date" jdbcType="BIGINT" property="lastModifiedDate" />
-    <result column="monly" jdbcType="DECIMAL" property="monly" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,8 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, password, created_by, created_date, last_modified_by, last_modified_date, 
-    monly
+    id, username, password, income, if_adult, created_by, created_date, last_modified_by, 
+    last_modified_date
   </sql>
   <select id="selectByExample" parameterType="org.qingshan.dao.entity.UserExample" resultMap="BaseResultMap">
     select
@@ -104,12 +105,12 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.qingshan.dao.entity.User" useGeneratedKeys="true">
-    insert into t_user (username, password, created_by, 
-      created_date, last_modified_by, last_modified_date, 
-      monly)
-    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
-      #{createdDate,jdbcType=BIGINT}, #{lastModifiedBy,jdbcType=VARCHAR}, #{lastModifiedDate,jdbcType=BIGINT}, 
-      #{monly,jdbcType=DECIMAL})
+    insert into t_user (username, password, income, 
+      if_adult, created_by, created_date, 
+      last_modified_by, last_modified_date)
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{income,jdbcType=DOUBLE}, 
+      #{ifAdult,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=BIGINT}, 
+      #{lastModifiedBy,jdbcType=VARCHAR}, #{lastModifiedDate,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.qingshan.dao.entity.User" useGeneratedKeys="true">
     insert into t_user
@@ -119,6 +120,12 @@
       </if>
       <if test="password != null">
         password,
+      </if>
+      <if test="income != null">
+        income,
+      </if>
+      <if test="ifAdult != null">
+        if_adult,
       </if>
       <if test="createdBy != null">
         created_by,
@@ -132,9 +139,6 @@
       <if test="lastModifiedDate != null">
         last_modified_date,
       </if>
-      <if test="monly != null">
-        monly,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="username != null">
@@ -142,6 +146,12 @@
       </if>
       <if test="password != null">
         #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="income != null">
+        #{income,jdbcType=DOUBLE},
+      </if>
+      <if test="ifAdult != null">
+        #{ifAdult,jdbcType=INTEGER},
       </if>
       <if test="createdBy != null">
         #{createdBy,jdbcType=VARCHAR},
@@ -154,9 +164,6 @@
       </if>
       <if test="lastModifiedDate != null">
         #{lastModifiedDate,jdbcType=BIGINT},
-      </if>
-      <if test="monly != null">
-        #{monly,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -178,6 +185,12 @@
       <if test="record.password != null">
         password = #{record.password,jdbcType=VARCHAR},
       </if>
+      <if test="record.income != null">
+        income = #{record.income,jdbcType=DOUBLE},
+      </if>
+      <if test="record.ifAdult != null">
+        if_adult = #{record.ifAdult,jdbcType=INTEGER},
+      </if>
       <if test="record.createdBy != null">
         created_by = #{record.createdBy,jdbcType=VARCHAR},
       </if>
@@ -190,9 +203,6 @@
       <if test="record.lastModifiedDate != null">
         last_modified_date = #{record.lastModifiedDate,jdbcType=BIGINT},
       </if>
-      <if test="record.monly != null">
-        monly = #{record.monly,jdbcType=DECIMAL},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -203,11 +213,12 @@
     set id = #{record.id,jdbcType=INTEGER},
       username = #{record.username,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
+      income = #{record.income,jdbcType=DOUBLE},
+      if_adult = #{record.ifAdult,jdbcType=INTEGER},
       created_by = #{record.createdBy,jdbcType=VARCHAR},
       created_date = #{record.createdDate,jdbcType=BIGINT},
       last_modified_by = #{record.lastModifiedBy,jdbcType=VARCHAR},
-      last_modified_date = #{record.lastModifiedDate,jdbcType=BIGINT},
-      monly = #{record.monly,jdbcType=DECIMAL}
+      last_modified_date = #{record.lastModifiedDate,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -221,6 +232,12 @@
       <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
       </if>
+      <if test="income != null">
+        income = #{income,jdbcType=DOUBLE},
+      </if>
+      <if test="ifAdult != null">
+        if_adult = #{ifAdult,jdbcType=INTEGER},
+      </if>
       <if test="createdBy != null">
         created_by = #{createdBy,jdbcType=VARCHAR},
       </if>
@@ -233,9 +250,6 @@
       <if test="lastModifiedDate != null">
         last_modified_date = #{lastModifiedDate,jdbcType=BIGINT},
       </if>
-      <if test="monly != null">
-        monly = #{monly,jdbcType=DECIMAL},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -243,11 +257,12 @@
     update t_user
     set username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
+      income = #{income,jdbcType=DOUBLE},
+      if_adult = #{ifAdult,jdbcType=INTEGER},
       created_by = #{createdBy,jdbcType=VARCHAR},
       created_date = #{createdDate,jdbcType=BIGINT},
       last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
-      last_modified_date = #{lastModifiedDate,jdbcType=BIGINT},
-      monly = #{monly,jdbcType=DECIMAL}
+      last_modified_date = #{lastModifiedDate,jdbcType=BIGINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

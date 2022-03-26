@@ -1,6 +1,5 @@
 package org.qingshan.dao.entity;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -305,6 +304,126 @@ public class UserExample {
             return (Criteria) this;
         }
 
+        public Criteria andIncomeIsNull() {
+            addCriterion("income is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeIsNotNull() {
+            addCriterion("income is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeEqualTo(Double value) {
+            addCriterion("income =", value, "income");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeNotEqualTo(Double value) {
+            addCriterion("income <>", value, "income");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeGreaterThan(Double value) {
+            addCriterion("income >", value, "income");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeGreaterThanOrEqualTo(Double value) {
+            addCriterion("income >=", value, "income");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeLessThan(Double value) {
+            addCriterion("income <", value, "income");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeLessThanOrEqualTo(Double value) {
+            addCriterion("income <=", value, "income");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeIn(List<Double> values) {
+            addCriterion("income in", values, "income");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeNotIn(List<Double> values) {
+            addCriterion("income not in", values, "income");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeBetween(Double value1, Double value2) {
+            addCriterion("income between", value1, value2, "income");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeNotBetween(Double value1, Double value2) {
+            addCriterion("income not between", value1, value2, "income");
+            return (Criteria) this;
+        }
+
+        public Criteria andIfAdultIsNull() {
+            addCriterion("if_adult is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIfAdultIsNotNull() {
+            addCriterion("if_adult is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIfAdultEqualTo(Integer value) {
+            addCriterion("if_adult =", value, "ifAdult");
+            return (Criteria) this;
+        }
+
+        public Criteria andIfAdultNotEqualTo(Integer value) {
+            addCriterion("if_adult <>", value, "ifAdult");
+            return (Criteria) this;
+        }
+
+        public Criteria andIfAdultGreaterThan(Integer value) {
+            addCriterion("if_adult >", value, "ifAdult");
+            return (Criteria) this;
+        }
+
+        public Criteria andIfAdultGreaterThanOrEqualTo(Integer value) {
+            addCriterion("if_adult >=", value, "ifAdult");
+            return (Criteria) this;
+        }
+
+        public Criteria andIfAdultLessThan(Integer value) {
+            addCriterion("if_adult <", value, "ifAdult");
+            return (Criteria) this;
+        }
+
+        public Criteria andIfAdultLessThanOrEqualTo(Integer value) {
+            addCriterion("if_adult <=", value, "ifAdult");
+            return (Criteria) this;
+        }
+
+        public Criteria andIfAdultIn(List<Integer> values) {
+            addCriterion("if_adult in", values, "ifAdult");
+            return (Criteria) this;
+        }
+
+        public Criteria andIfAdultNotIn(List<Integer> values) {
+            addCriterion("if_adult not in", values, "ifAdult");
+            return (Criteria) this;
+        }
+
+        public Criteria andIfAdultBetween(Integer value1, Integer value2) {
+            addCriterion("if_adult between", value1, value2, "ifAdult");
+            return (Criteria) this;
+        }
+
+        public Criteria andIfAdultNotBetween(Integer value1, Integer value2) {
+            addCriterion("if_adult not between", value1, value2, "ifAdult");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedByIsNull() {
             addCriterion("created_by is null");
             return (Criteria) this;
@@ -562,66 +681,6 @@ public class UserExample {
 
         public Criteria andLastModifiedDateNotBetween(Long value1, Long value2) {
             addCriterion("last_modified_date not between", value1, value2, "lastModifiedDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonlyIsNull() {
-            addCriterion("monly is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonlyIsNotNull() {
-            addCriterion("monly is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonlyEqualTo(BigDecimal value) {
-            addCriterion("monly =", value, "monly");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonlyNotEqualTo(BigDecimal value) {
-            addCriterion("monly <>", value, "monly");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonlyGreaterThan(BigDecimal value) {
-            addCriterion("monly >", value, "monly");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonlyGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("monly >=", value, "monly");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonlyLessThan(BigDecimal value) {
-            addCriterion("monly <", value, "monly");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonlyLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("monly <=", value, "monly");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonlyIn(List<BigDecimal> values) {
-            addCriterion("monly in", values, "monly");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonlyNotIn(List<BigDecimal> values) {
-            addCriterion("monly not in", values, "monly");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonlyBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("monly between", value1, value2, "monly");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonlyNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("monly not between", value1, value2, "monly");
             return (Criteria) this;
         }
     }

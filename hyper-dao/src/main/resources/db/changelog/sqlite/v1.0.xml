@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1.0_1" author="tangkun">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="t_user"/>
+            </not>
+        </preConditions>
+        <comment>t_user 建表</comment>
+        <sql>
+            CREATE TABLE "t_user" (
+            "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+            "username" text(255),
+            "password" text(255),
+            "income" real(255),
+            "if_adult" integer(1),
+            "created_by" text(20),
+            "created_date" integer(20),
+            "last_modified_by" text(20),
+            "last_modified_date" integer(20)
+            );
+        </sql>
+        <rollback>
+            DROP TABLE IF EXISTS `t_user`;
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

@@ -1,14 +1,32 @@
 package org.qingshan.dao.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 public class User implements Serializable {
+    /**
+     * id
+     */
     private Integer id;
 
+    /**
+     * 用户名
+     */
     private String username;
 
+    /**
+     * 密码
+     */
     private String password;
+
+    /**
+     * 收入
+     */
+    private Double income;
+
+    /**
+     * 是否成年(1:成年 0:未成年)
+     */
+    private Integer ifAdult;
 
     private String createdBy;
 
@@ -17,8 +35,6 @@ public class User implements Serializable {
     private String lastModifiedBy;
 
     private Long lastModifiedDate;
-
-    private BigDecimal monly;
 
     private static final long serialVersionUID = 1L;
 
@@ -44,6 +60,22 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password == null ? null : password.trim();
+    }
+
+    public Double getIncome() {
+        return income;
+    }
+
+    public void setIncome(Double income) {
+        this.income = income;
+    }
+
+    public Integer getIfAdult() {
+        return ifAdult;
+    }
+
+    public void setIfAdult(Integer ifAdult) {
+        this.ifAdult = ifAdult;
     }
 
     public String getCreatedBy() {
@@ -78,14 +110,6 @@ public class User implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public BigDecimal getMonly() {
-        return monly;
-    }
-
-    public void setMonly(BigDecimal monly) {
-        this.monly = monly;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -95,11 +119,12 @@ public class User implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", username=").append(username);
         sb.append(", password=").append(password);
+        sb.append(", income=").append(income);
+        sb.append(", ifAdult=").append(ifAdult);
         sb.append(", createdBy=").append(createdBy);
         sb.append(", createdDate=").append(createdDate);
         sb.append(", lastModifiedBy=").append(lastModifiedBy);
         sb.append(", lastModifiedDate=").append(lastModifiedDate);
-        sb.append(", monly=").append(monly);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
