@@ -16,7 +16,7 @@ public class SpringContextUtil {
     }
 
     /**
-     * 自动注入
+     * 普通类自动注入
      *
      * @param obj
      */
