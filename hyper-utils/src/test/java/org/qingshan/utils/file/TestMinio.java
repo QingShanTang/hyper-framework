@@ -14,7 +14,7 @@ public class TestMinio {
     @Before
     public void before() {
         MinioProp minioProp = new MinioProp();
-        minioProp.setEndpoint("http://172.18.1.24:9078");
+        minioProp.setEndpoint("http://localhost:9078");
         minioProp.setSecretkey("geekplus");
         minioProp.setAccesskey("geekplus");
         minioProp.setBucketName("xixi");
