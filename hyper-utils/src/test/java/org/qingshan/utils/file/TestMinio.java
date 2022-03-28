@@ -27,7 +27,7 @@ public class TestMinio {
 //        System.out.println(MinioUtil.bucketExists("heihei"));
 //        MinioUtil.makeBucket("haha");
 //        System.out.println(MinioUtil.ifObjectExist("haha","tt5.json"));
-        MinioUtil.putObject("haha","folder10/xixi1.json","/Users/mac/Desktop/poppick.txt");
+//        MinioUtil.putObject("haha","folder10/xixi1.json","/Users/mac/Desktop/poppick.txt");
 //        MinioUtil.putObject("haha","xixi1.json",new FileInputStream("/Users/mac/Desktop/poppick.txt"));
 //        MinioUtil.putDirObject("haha", "folder1/folder6/");
 //        MinioUtil.removeBucket("xixi");

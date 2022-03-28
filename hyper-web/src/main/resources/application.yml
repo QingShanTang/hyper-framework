@@ -9,3 +9,8 @@ spring:
   profiles:
     active: @env@
     include: dao,@env@-dao
+minio:
+  endpoint: http://172.18.1.24:9078
+  accesskey: geekplus
+  secretkey: geekplus
+  bucketName: haha
