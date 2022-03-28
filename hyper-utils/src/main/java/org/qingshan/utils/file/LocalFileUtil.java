@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
-public class FileUtil {
+public class LocalFileUtil {
     private static final DateFormat df = new SimpleDateFormat("yyyyMMdd");
     private static final DateFormat df1 = new SimpleDateFormat("HHmmss");
 
