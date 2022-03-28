@@ -21,7 +21,7 @@ public class FileService {
         log.info("备注:{}", params.getRemark());
         for (MultipartFile item : params.getFileList()) {
             FilePojo file = new FilePojo(item.getOriginalFilename(), item.getSize(), item.getInputStream());
-            minioUtil.putObject("haha", "wowo.json", file.getIn());
+            minioUtil.putObject("heihei", "wowo.json", file.getIn());
         }
     }
 }
