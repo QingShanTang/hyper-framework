@@ -1,8 +1,10 @@
 package org.qingshan.utils.quartz;
 
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.quartz.JobDataMap;
 import org.quartz.JobKey;
@@ -11,6 +13,14 @@ import org.quartz.SchedulerException;
 @Slf4j
 public class TestQuartz {
 
+    private QuartzUtil quartzUtil;
+
+    @SneakyThrows
+    @Before
+    public void before() {
+        quartzUtil = QuartzUtil.init();
+    }
+
     /**
      * 测试job是否存在
      *
@@ -18,7 +28,7 @@ public class TestQuartz {
      */
     @Test
     public void testCheckExists() throws SchedulerException {
-        Assert.assertTrue(QuartzUtil.ifJobExist(JobKey.jobKey("name", "group")));
+        Assert.assertTrue(quartzUtil.ifJobExist(JobKey.jobKey("name", "group")));
     }
 
     /**
@@ -32,7 +42,7 @@ public class TestQuartz {
                 .jobName("runOnce")
                 .jobClazz(PrintTimeJob.class)
                 .build();
-        QuartzUtil.operateJob(quartzBean, QuartzEnum.JobOperateType.RUNONCE);
+        quartzUtil.operateJob(quartzBean, QuartzEnum.JobOperateType.RUNONCE);
         System.in.read();
     }
 
@@ -43,7 +53,7 @@ public class TestQuartz {
      */
     @Test
     public void testResumeJob() throws Exception {
-        QuartzUtil.resumeJob(JobKey.jobKey("name", "group"));
+        quartzUtil.resumeJob(JobKey.jobKey("name", "group"));
     }
 
     @Test
@@ -56,19 +66,19 @@ public class TestQuartz {
                 .cronExpression("*/10 * * * * ?")
                 .jobDataMap(jobDataMap)
                 .build();
-        QuartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.START);
+        quartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.START);
         Thread.sleep(24000);
-        QuartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.STOP);
+        quartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.STOP);
         Thread.sleep(30000);
-        QuartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.START);
+        quartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.START);
         Thread.sleep(40000);
-        QuartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.DELETE);
+        quartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.DELETE);
         Thread.sleep(8000);
-        QuartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.RUNONCE);
+        quartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.RUNONCE);
         Thread.sleep(8000);
-        QuartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.DELETE);
+        quartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.DELETE);
         Thread.sleep(8000);
-        QuartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.START);
+        quartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.START);
         Thread.sleep(8000);
         bean1 = QuartzBean.builder()
                 .jobName("printTime")
@@ -82,7 +92,7 @@ public class TestQuartz {
                 )
                 .jobDataMap(jobDataMap)
                 .build();
-        QuartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.START);
+        quartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.START);
         Thread.sleep(180000);
     }
 
