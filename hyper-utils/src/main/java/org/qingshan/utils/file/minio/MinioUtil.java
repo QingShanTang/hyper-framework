@@ -2,11 +2,14 @@ package org.qingshan.utils.file.minio;
 
 import io.minio.*;
 import io.minio.http.Method;
+import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -146,6 +149,27 @@ public class MinioUtil {
      */
     public InputStream getObject(String bucketName, String objectName) throws Exception {
         return minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
+    }
+
+
+    /**
+     * 批量获取对象
+     *
+     * @param bucketName
+     * @param prefix
+     * @throws Exception
+     */
+    public Map<String, InputStream> listObjects(String bucketName, String prefix, boolean recursive) throws Exception {
+        Map<String, InputStream> objects = new HashMap<>();
+        Iterable<Result<Item>> results = minioClient.listObjects(
+                ListObjectsArgs.builder().bucket(bucketName).prefix(prefix).recursive(recursive).build());
+        for (Result<Item> result : results) {
+            if (!result.get().isDir()) {
+                String objectName = result.get().objectName();
+                objects.put(objectName, getObject(bucketName, objectName));
+            }
+        }
+        return objects;
     }
 
 

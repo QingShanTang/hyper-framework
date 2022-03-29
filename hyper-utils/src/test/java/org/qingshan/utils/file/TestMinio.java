@@ -44,5 +44,6 @@ public class TestMinio {
         IOUtils.copy(in, new FileOutputStream("/Users/mac/Desktop/wowo.json"));
         StatObjectResponse response = minioUtil.getObjectInfo("haha", "xixi1.json");
         minioUtil.removeObject("haha", "xixi1.json");
+        minioUtil.listObjects("xixi", "folder1", false);
     }
 }
