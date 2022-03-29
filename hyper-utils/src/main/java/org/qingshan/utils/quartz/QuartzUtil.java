@@ -14,14 +14,20 @@ import org.quartz.impl.StdSchedulerFactory;
 @Slf4j
 public class QuartzUtil {
 
-    private static Scheduler scheduler;
+    private Scheduler scheduler;
 
-    static {
-        try {
-            scheduler = new StdSchedulerFactory().getScheduler();
-        } catch (SchedulerException e) {
-            log.error("创建调度器失败!errorMsg->{}", e.getLocalizedMessage());
+    public static QuartzUtil init() throws Exception {
+        return init(null);
+    }
+
+    public static QuartzUtil init(Scheduler scheduler) throws Exception {
+        QuartzUtil quartzUtil = new QuartzUtil();
+        if (null != scheduler) {
+            quartzUtil.scheduler = scheduler;
+        } else {
+            quartzUtil.scheduler = new StdSchedulerFactory().getScheduler();
         }
+        return quartzUtil;
     }
 
     /**
@@ -29,7 +35,7 @@ public class QuartzUtil {
      *
      * @throws SchedulerException
      */
-    private static void start() throws SchedulerException {
+    private void start() throws SchedulerException {
         if (null != scheduler) {
             if (!scheduler.isStarted()) {
                 scheduler.start();
@@ -46,7 +52,7 @@ public class QuartzUtil {
      * @param operateType
      * @throws Exception
      */
-    public static void operateJob(QuartzBean quartzBean, QuartzEnum.JobOperateType operateType) throws Exception {
+    public void operateJob(QuartzBean quartzBean, QuartzEnum.JobOperateType operateType) throws Exception {
         start();
         switch (operateType) {
             case START:
@@ -72,7 +78,7 @@ public class QuartzUtil {
      * @param quartzBean
      * @throws Exception
      */
-    public static void startJob(QuartzBean quartzBean) throws Exception {
+    public void startJob(QuartzBean quartzBean) throws Exception {
         log.info("启动定时任务,quartzBean:{}", JSONUtil.toJSONString(quartzBean));
         if (ifJobExist(quartzBean.getJobKey())) {
             rescheduleJob(quartzBean);
@@ -89,7 +95,7 @@ public class QuartzUtil {
      * @param quartzBean 定时任务信息类
      * @throws Exception
      */
-    public static void createJob(QuartzBean quartzBean) throws Exception {
+    public void createJob(QuartzBean quartzBean) throws Exception {
         log.info("创建定时任务,quartzBean:{}", JSONUtil.toJSONString(quartzBean));
         if (ifJobExist(quartzBean.getJobKey())) {
             throw new Exception("定时任务已存在!");
@@ -109,7 +115,7 @@ public class QuartzUtil {
      * @return
      * @throws Exception
      */
-    private static Trigger buildTrigger(QuartzBean quartzBean) throws Exception {
+    private Trigger buildTrigger(QuartzBean quartzBean) throws Exception {
         log.info("构建触发器,quartzBean:{}", quartzBean);
         String cronExpression = quartzBean.getCronExpression();
         QuartzBean.SimpleConfig simpleConfig = quartzBean.getSimpleConfig();
@@ -169,7 +175,7 @@ public class QuartzUtil {
      * @return
      * @throws SchedulerException
      */
-    public static Trigger.TriggerState getTriggerState(TriggerKey triggerKey) throws SchedulerException {
+    public Trigger.TriggerState getTriggerState(TriggerKey triggerKey) throws SchedulerException {
         Trigger.TriggerState state = scheduler.getTriggerState(triggerKey);
         return state;
     }
@@ -180,7 +186,7 @@ public class QuartzUtil {
      * @param quartzBean
      * @throws Exception
      */
-    public static void rescheduleJob(QuartzBean quartzBean) throws Exception {
+    public void rescheduleJob(QuartzBean quartzBean) throws Exception {
         log.info("重置触发器,quartzBean:{}", JSONUtil.toJSONString(quartzBean));
         if (ifTriggerChange(quartzBean)) {
             Trigger trigger = buildTrigger(quartzBean);
@@ -193,7 +199,7 @@ public class QuartzUtil {
      *
      * @throws SchedulerException
      */
-    public static void pauseAllJob() throws SchedulerException {
+    public void pauseAllJob() throws SchedulerException {
         log.info("暂停所有定时任务");
         scheduler.pauseAll();
     }
@@ -203,7 +209,7 @@ public class QuartzUtil {
      *
      * @throws SchedulerException
      */
-    public static void resumeAllJob() throws SchedulerException {
+    public void resumeAllJob() throws SchedulerException {
         log.info("恢复所有定时任务");
         scheduler.resumeAll();
     }
@@ -215,7 +221,7 @@ public class QuartzUtil {
      * @param jobKey
      * @throws Exception
      */
-    public static void pauseJob(JobKey jobKey) throws Exception {
+    public void pauseJob(JobKey jobKey) throws Exception {
         log.info("暂停定时任务,jobKey:{}", JSONUtil.toJSONString(jobKey));
         scheduler.pauseJob(jobKey);
     }
@@ -227,7 +233,7 @@ public class QuartzUtil {
      * @param jobKey
      * @throws Exception
      */
-    public static void resumeJob(JobKey jobKey) throws Exception {
+    public void resumeJob(JobKey jobKey) throws Exception {
         log.info("恢复定时任务,jobKey:{}", JSONUtil.toJSONString(jobKey));
         if (!ifJobExist(jobKey)) {
             throw new Exception("定时任务不存在!");
@@ -241,7 +247,7 @@ public class QuartzUtil {
      * @param jobKey
      * @throws Exception
      */
-    public static void deleteJob(JobKey jobKey) throws Exception {
+    public void deleteJob(JobKey jobKey) throws Exception {
         log.info("删除定时任务,jobKey:{}", JSONUtil.toJSONString(jobKey));
         scheduler.deleteJob(jobKey);
     }
@@ -253,7 +259,7 @@ public class QuartzUtil {
      * @param quartzBean
      * @throws Exception
      */
-    public static void runOnce(QuartzBean quartzBean) throws Exception {
+    public void runOnce(QuartzBean quartzBean) throws Exception {
         log.info("执行一次定时任务,quartzBean:{}", JSONUtil.toJSONString(quartzBean));
         if (ifJobExist(quartzBean.getJobKey())) {
             scheduler.triggerJob(quartzBean.getJobKey());
@@ -279,7 +285,7 @@ public class QuartzUtil {
      * @param jobKey
      * @throws Exception
      */
-    public static void runOnce(JobKey jobKey) throws Exception {
+    public void runOnce(JobKey jobKey) throws Exception {
         log.info("执行一次定时任务,jobKey:{}", JSONUtil.toJSONString(jobKey));
         if (!ifJobExist(jobKey)) {
             throw new Exception("定时任务不存在!");
@@ -295,7 +301,7 @@ public class QuartzUtil {
      * @return
      * @throws SchedulerException
      */
-    public static Boolean ifTriggerRun(TriggerKey triggerKey) throws SchedulerException {
+    public Boolean ifTriggerRun(TriggerKey triggerKey) throws SchedulerException {
         Trigger.TriggerState state = getTriggerState(triggerKey);
         if (state == Trigger.TriggerState.NORMAL) {
             return true;
@@ -310,7 +316,7 @@ public class QuartzUtil {
      * @return
      * @throws SchedulerException
      */
-    public static Boolean ifJobExist(JobKey jobKey) throws SchedulerException {
+    public Boolean ifJobExist(JobKey jobKey) throws SchedulerException {
         return scheduler.checkExists(jobKey);
     }
 
@@ -321,7 +327,7 @@ public class QuartzUtil {
      * @return
      * @throws SchedulerException
      */
-    public static Boolean ifTriggerChange(QuartzBean quartzBean) throws SchedulerException {
+    public Boolean ifTriggerChange(QuartzBean quartzBean) throws SchedulerException {
         Boolean ifChange = true;
         Object oldConfig = null;
         String cronExpression = quartzBean.getCronExpression();
