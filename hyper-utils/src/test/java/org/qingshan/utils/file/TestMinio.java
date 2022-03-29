@@ -25,8 +25,8 @@ public class TestMinio {
         minioProp.setEndpoint("http://localhost:9078");
         minioProp.setSecretkey("geekplus");
         minioProp.setAccesskey("geekplus");
-        minioProp.setBucketName("xixi");
-        minioUtil = MinioUtil.initClient(minioProp);
+        minioProp.setBuckets("xixi");
+        minioUtil = MinioUtil.init(minioProp);
     }
 
     @SneakyThrows

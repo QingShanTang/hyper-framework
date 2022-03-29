@@ -3,7 +3,7 @@ package org.qingshan.utils.file.minio;
 import io.minio.*;
 import io.minio.http.Method;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -18,9 +18,12 @@ public class MinioUtil {
     public static MinioUtil init(MinioProp minioProp) throws Exception {
         MinioUtil minioUtil = new MinioUtil();
         minioUtil.buildClient(minioProp);
-        if (StringUtils.isNotBlank(minioProp.getBucketName())) {
-            minioUtil.makeBucket(minioProp.getBucketName());
+        if (CollectionUtils.isNotEmpty(minioProp.getBuckets())) {
+            for (String bucket : minioProp.getBuckets()) {
+                minioUtil.makeBucket(bucket);
+            }
         }
+
         return minioUtil;
     }
 
