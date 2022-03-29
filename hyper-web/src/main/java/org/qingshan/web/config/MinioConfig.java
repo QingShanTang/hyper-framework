@@ -19,6 +19,6 @@ public class MinioConfig {
     @SneakyThrows
     @Bean
     public MinioUtil minioUtil(MinioProp minioProp) {
-        return MinioUtil.initClient(minioProp);
+        return MinioUtil.init(minioProp);
     }
 }

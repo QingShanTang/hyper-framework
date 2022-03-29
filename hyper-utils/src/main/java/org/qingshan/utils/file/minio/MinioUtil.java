@@ -15,7 +15,7 @@ public class MinioUtil {
 
     private MinioClient minioClient;
 
-    public static MinioUtil initClient(MinioProp minioProp) throws Exception {
+    public static MinioUtil init(MinioProp minioProp) throws Exception {
         MinioUtil minioUtil = new MinioUtil();
         minioUtil.buildClient(minioProp);
         if (StringUtils.isNotBlank(minioProp.getBucketName())) {
