@@ -32,6 +32,7 @@ public class TestMinio {
     @SneakyThrows
     @Test
     public void testMinio() {
+
         System.out.println(minioUtil.bucketExists("heihei"));
         minioUtil.makeBucket("haha");
         System.out.println(minioUtil.ifObjectExist("haha", "tt5.json"));
