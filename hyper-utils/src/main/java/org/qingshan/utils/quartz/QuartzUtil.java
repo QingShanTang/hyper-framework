@@ -27,6 +27,7 @@ public class QuartzUtil {
         } else {
             quartzUtil.scheduler = new StdSchedulerFactory().getScheduler();
         }
+        quartzUtil.start();
         return quartzUtil;
     }
 
@@ -53,7 +54,6 @@ public class QuartzUtil {
      * @throws Exception
      */
     public void operateJob(QuartzBean quartzBean, QuartzEnum.JobOperateType operateType) throws Exception {
-        start();
         switch (operateType) {
             case START:
                 startJob(quartzBean);
