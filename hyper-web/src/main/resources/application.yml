@@ -17,3 +17,8 @@ minio:
   accesskey: geekplus
   secretkey: geekplus
   buckets: heihei1,heihei2
+
+#将sql信息打印到控制台
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
