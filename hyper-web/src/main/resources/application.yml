@@ -9,6 +9,9 @@ spring:
   profiles:
     active: @env@
     include: dao,@env@-dao
+  #分页插件会循环依赖
+  main:
+    allow-circular-references: true
 minio:
   endpoint: http://172.18.1.24:9078
   accesskey: geekplus
