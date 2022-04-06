@@ -12,6 +12,7 @@ import org.dom4j.io.SAXReader;
 import org.qingshan.utils.json.JSONUtil;
 
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -91,6 +92,10 @@ public class StringTemplateUtil {
         return null == map ? new HashMap<>() : map;
     }
 
+    public static String fill(String template, Object paramsObj) throws Exception {
+        return fill(template, paramsObj, false);
+    }
+
     /**
      * 填充字符串模板中参数
      *
@@ -98,18 +103,22 @@ public class StringTemplateUtil {
      * @param paramsObj
      * @return
      */
-    public static String fill(String template, Object paramsObj) throws Exception {
+    public static String fill(String template, Object paramsObj, boolean mustFullParams) throws Exception {
         //将参数解析为map
         Map<String, Object> params = objToMap(paramsObj);
 
         //获取以 #{ 开始，不是 } 结尾的多个字符 (其中()用来分组)
-        Set<String> templateParams = parseTempParams(template, "#\\{([^}]+)");
+        Set<String> templateParams = parseTempParams(template);
 
         //替换#{xxx}，其中xxx是参数
         for (String templateParam : templateParams
         ) {
             if (null == params.get(templateParam)) {
-                template = template.replaceAll("#\\{" + templateParam + "\\}", "");
+                if (mustFullParams) {
+                    throw new Exception(MessageFormat.format("参数缺失,param:{0}", templateParam));
+                } else {
+                    template = template.replaceAll("#\\{" + templateParam + "\\}", "");
+                }
             } else {
                 template = template.replaceAll("#\\{" + templateParam + "\\}", params.get(templateParam).toString());
             }
@@ -122,17 +131,16 @@ public class StringTemplateUtil {
      * 解析模板参数
      *
      * @param template
-     * @param regex
      * @return
      * @throws Exception
      */
-    public static Set<String> parseTempParams(String template, String regex) throws Exception {
+    public static Set<String> parseTempParams(String template) throws Exception {
         if (StringUtils.isBlank(template)) {
             throw new Exception("模板不可为空!");
         }
         Set<String> templateParams = new HashSet<>();
 
-        Pattern p = Pattern.compile(regex);
+        Pattern p = Pattern.compile("#\\{([^}]+)");
         Matcher m = p.matcher(template);
 
         //获取匹配的内容
