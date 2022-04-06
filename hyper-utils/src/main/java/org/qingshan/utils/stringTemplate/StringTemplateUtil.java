@@ -99,22 +99,11 @@ public class StringTemplateUtil {
      * @return
      */
     public static String fill(String template, Object paramsObj) throws Exception {
-        if (StringUtils.isBlank(template)) {
-            throw new Exception("模板不可为空!");
-        }
         //将参数解析为map
         Map<String, Object> params = objToMap(paramsObj);
 
-        Set<String> templateParams = new HashSet<>();
-
         //获取以 #{ 开始，不是 } 结尾的多个字符 (其中()用来分组)
-        Pattern p = Pattern.compile("#\\{([^}]+)");
-        Matcher m = p.matcher(template);
-
-        //获取 #{} 中的内容
-        while (m.find()) {
-            templateParams.add(m.group(1));
-        }
+        Set<String> templateParams = parseTempParams(template, "#\\{([^}]+)");
 
         //替换#{xxx}，其中xxx是参数
         for (String templateParam : templateParams
@@ -127,6 +116,30 @@ public class StringTemplateUtil {
         }
 
         return template;
+    }
+
+    /**
+     * 解析模板参数
+     *
+     * @param template
+     * @param regex
+     * @return
+     * @throws Exception
+     */
+    public static Set<String> parseTempParams(String template, String regex) throws Exception {
+        if (StringUtils.isBlank(template)) {
+            throw new Exception("模板不可为空!");
+        }
+        Set<String> templateParams = new HashSet<>();
+
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(template);
+
+        //获取匹配的内容
+        while (m.find()) {
+            templateParams.add(m.group(1));
+        }
+        return templateParams;
     }
 
     /**
