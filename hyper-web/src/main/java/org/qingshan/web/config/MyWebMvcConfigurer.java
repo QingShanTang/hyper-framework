@@ -14,6 +14,7 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        //国际化拦截器
         registry.addInterceptor(localeChangeInterceptor)
                 .addPathPatterns("/api/**");
     }
