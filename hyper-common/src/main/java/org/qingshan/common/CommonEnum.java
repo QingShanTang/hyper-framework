@@ -5,16 +5,16 @@ public class CommonEnum {
     /**
      * 开关
      */
-    public enum Switch {
+    public enum Status {
 
-        ON("ON", 1, true),
-        OFF("OFF", 0, false);
+        SUCCESS("SUCCESS", 1, true),
+        FAIL("FAIL", 0, false);
 
         private String str;
         private Integer num;
         private Boolean bool;
 
-        Switch(String str, Integer num, Boolean bool) {
+        Status(String str, Integer num, Boolean bool) {
             this.str = str;
             this.num = num;
             this.bool = bool;
