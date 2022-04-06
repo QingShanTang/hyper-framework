@@ -5,6 +5,7 @@ import io.minio.http.Method;
 import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.qingshan.utils.stringTemplate.StringTemplateUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -170,6 +171,11 @@ public class MinioUtil {
             }
         }
         return objects;
+    }
+
+    public Map<String, InputStream> listObjects(String bucketName, MinioEnum.PathTemp pathTemp, Map<String, String> pathTempParams, boolean recursive) throws Exception {
+        String prefix = StringTemplateUtil.fill(pathTemp.getPathTemp(), pathTempParams, true);
+        return listObjects(bucketName, prefix, recursive);
     }
 
 
