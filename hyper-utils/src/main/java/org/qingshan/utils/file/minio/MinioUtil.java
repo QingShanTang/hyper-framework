@@ -69,6 +69,20 @@ public class MinioUtil {
         minioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucketName).build());
     }
 
+    /**
+     * 强制删除bucket(慎用!!!)
+     *
+     * @param bucketName
+     * @param force
+     * @throws Exception
+     */
+    public void removeBucket(String bucketName, boolean force) throws Exception {
+        if (force) {
+            clearBucket(bucketName);
+        }
+        removeBucket(bucketName);
+    }
+
 
     /**
      * 判断文件是否存在
