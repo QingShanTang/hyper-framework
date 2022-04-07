@@ -25,7 +25,6 @@ public class TestMinio {
         minioProp.setEndpoint("http://localhost:9078");
         minioProp.setSecretkey("geekplus");
         minioProp.setAccesskey("geekplus");
-        minioProp.setBuckets("xixi");
         minioUtil = MinioUtil.init(minioProp);
     }
 
@@ -36,7 +35,7 @@ public class TestMinio {
         System.out.println(minioUtil.bucketExists("heihei"));
         minioUtil.makeBucket("haha");
         System.out.println(minioUtil.ifObjectExist("haha", "tt5.json"));
-        minioUtil.putObject("haha", "folder10/xixi1.json", "/Users/mac/Desktop/poppick.txt");
+        minioUtil.putObject("haha", "folder10/xii", "/Users/mac/Desktop/upload/DKNOrderAllocationAlgoOutput-1.json");
         minioUtil.putObject("haha", "xixi1.json", new FileInputStream("/Users/mac/Desktop/poppick.txt"));
         minioUtil.putDirObject("haha", "folder1/folder6/");
         minioUtil.removeBucket("xixi");
@@ -46,5 +45,7 @@ public class TestMinio {
         StatObjectResponse response = minioUtil.getObjectInfo("haha", "xixi1.json");
         minioUtil.removeObject("haha", "xixi1.json");
         minioUtil.listObjects("xixi", "folder1", false);
+        minioUtil.removeBucket("xixi",true);
+        minioUtil.clearBucket("haha");
     }
 }
