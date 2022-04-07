@@ -177,8 +177,8 @@ public class MinioUtil {
         return objects;
     }
 
-    public Map<String, InputStream> listObjects(String bucketName, MinioEnum.PathTemp pathTemp, Map<String, String> pathTempParams, boolean recursive) throws Exception {
-        String prefix = StringTemplateUtil.fill(pathTemp.getPathTemp(), pathTempParams, true);
+    public Map<String, InputStream> listObjects(String bucketName, String pathTemp, Map<String, String> pathTempParams, boolean recursive) throws Exception {
+        String prefix = StringTemplateUtil.fill(pathTemp, pathTempParams, true);
         return listObjects(bucketName, prefix, recursive);
     }
 
