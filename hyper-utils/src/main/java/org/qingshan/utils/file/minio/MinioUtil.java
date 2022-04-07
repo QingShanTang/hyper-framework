@@ -5,6 +5,7 @@ import io.minio.http.Method;
 import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.qingshan.utils.stringTemplate.StringTemplateUtil;
 
 import java.io.ByteArrayInputStream;
@@ -161,6 +162,9 @@ public class MinioUtil {
      * @throws Exception
      */
     public Map<String, InputStream> listObjects(String bucketName, String prefix, boolean recursive) throws Exception {
+        if (StringUtils.startsWith(prefix, "/")) {
+            StringUtils.removeStart(prefix, "/");
+        }
         Map<String, InputStream> objects = new HashMap<>();
         Iterable<Result<Item>> results = minioClient.listObjects(
                 ListObjectsArgs.builder().bucket(bucketName).prefix(prefix).recursive(recursive).build());
