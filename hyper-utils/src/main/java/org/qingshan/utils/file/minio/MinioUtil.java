@@ -1,5 +1,6 @@
 package org.qingshan.utils.file.minio;
 
+import cn.hutool.core.util.ReUtil;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Item;
@@ -10,6 +11,7 @@ import org.qingshan.utils.stringTemplate.StringTemplateUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -98,6 +100,31 @@ public class MinioUtil {
         return minioClient.uploadObject(
                 UploadObjectArgs.builder()
                         .bucket(bucketName).object(objectName).filename(fileName).build());
+    }
+
+    /**
+     * 上传本地文件
+     *
+     * @param bucketName
+     * @param pathTemp
+     * @param pathTempParams
+     * @param fileName
+     * @return
+     * @throws Exception
+     */
+    public ObjectWriteResponse putObject(String bucketName,
+                                         String pathTemp,
+                                         Map<String, String> pathTempParams,
+                                         String fileName
+    ) throws Exception {
+        String filePath = StringTemplateUtil.fill(pathTemp, pathTempParams, true);
+        if (StringUtils.startsWith(filePath, "/")) {
+            StringUtils.removeStart(filePath, "/");
+        }
+        if (!ReUtil.isMatch("^(?!\\/)(.*\\/)(.+?)\\.([^\\/]+)$", filePath)) {
+            throw new Exception(MessageFormat.format("非文件格式路径,path:{0}", filePath));
+        }
+        return putObject(bucketName, filePath, fileName);
     }
 
     /**
