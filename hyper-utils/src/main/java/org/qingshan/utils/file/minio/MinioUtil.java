@@ -237,6 +237,26 @@ public class MinioUtil {
     public void removeObject(String bucketName, String objectName) throws Exception {
         minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(objectName).build());
     }
+
+    /**
+     * 清空bucket
+     *
+     * @param bucketName
+     * @throws Exception
+     */
+    public void clearBucket(String bucketName) throws Exception {
+        boolean flag = bucketExists(bucketName);
+        if (flag) {
+            // 递归列举某个bucket下的所有文件，然后循环删除
+            Iterable<Result<Item>> iterable = minioClient.listObjects(ListObjectsArgs.builder()
+                    .bucket(bucketName)
+                    .recursive(true)
+                    .build());
+            for (Result<Item> itemResult : iterable) {
+                removeObject(bucketName, itemResult.get().objectName());
+            }
+        }
+    }
 }
 
 
