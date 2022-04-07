@@ -169,7 +169,12 @@ public class MinioUtil {
         Iterable<Result<Item>> results = minioClient.listObjects(
                 ListObjectsArgs.builder().bucket(bucketName).prefix(prefix).recursive(recursive).build());
         for (Result<Item> result : results) {
-            if (!result.get().isDir()) {
+            if (result.get().isDir()) {
+                if (!StringUtils.endsWith(prefix, "/")) {
+                    prefix += "/";
+                }
+                return listObjects(bucketName, prefix, recursive);
+            } else {
                 String objectName = result.get().objectName();
                 objects.put(objectName, getObject(bucketName, objectName));
             }
