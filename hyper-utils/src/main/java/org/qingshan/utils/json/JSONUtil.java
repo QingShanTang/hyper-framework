@@ -16,12 +16,12 @@ public class JSONUtil {
 
     @SneakyThrows
     public static String toJSONStringWithFormat(Object o) {
-        return "\n" + objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(o);
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(o);
     }
 
     @SneakyThrows
     public static void printJSONStringWithFormat(Object o) {
-        log.info(toJSONStringWithFormat(o));
+        log.info("\n" + toJSONStringWithFormat(o));
     }
 
     @SneakyThrows
