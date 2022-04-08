@@ -1,4 +1,6 @@
 - id: 1
   name: xixi
+  ifAdult: true
 - id: 2
   name: haha
+  ifAdult: false

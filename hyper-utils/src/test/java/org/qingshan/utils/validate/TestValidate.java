@@ -10,6 +10,8 @@ public class TestValidate {
     @Test
     public void testValidateObj() {
         User user = new User();
+        user.setName("xixi");
+        user.setAge(1);
         ValidateResult result = ValidatorUtil.validator(user);
         JSONUtil.printJSONStringWithFormat(result);
     }

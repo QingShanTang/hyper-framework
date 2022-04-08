@@ -6,14 +6,15 @@ import org.junit.Test;
 import org.qingshan.utils.json.JSONUtil;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 public class TestYaml {
     @Test
     public void testLoadYaml() {
-        JSONUtil.printJSONStringWithFormat(YamlLoader.loadClassPathFile("yaml.yaml", new TypeReference<List<Map>>() {
-        }));
-        JSONUtil.printJSONStringWithFormat(YamlLoader.loadClassPathFile("yaml.yaml", List.class));
+        List<User> userList = YamlLoader.loadClassPathFile("test.yaml", new TypeReference<List<User>>() {
+        });
+        JSONUtil.printJSONStringWithFormat(userList);
+        List list = YamlLoader.loadClassPathFile("test.yaml", List.class);
+        JSONUtil.printJSONStringWithFormat(list);
     }
 }
