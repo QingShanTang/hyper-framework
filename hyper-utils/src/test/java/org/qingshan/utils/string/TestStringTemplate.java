@@ -1,4 +1,4 @@
-package org.qingshan.utils.stringTemplate;
+package org.qingshan.utils.string;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

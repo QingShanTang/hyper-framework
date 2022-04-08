@@ -7,7 +7,7 @@ import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.qingshan.utils.stringTemplate.StringTemplateUtil;
+import org.qingshan.utils.string.StringTemplateUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
