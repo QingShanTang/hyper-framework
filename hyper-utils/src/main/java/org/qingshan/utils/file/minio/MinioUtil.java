@@ -133,7 +133,7 @@ public class MinioUtil {
     ) throws Exception {
         String filePath = StringTemplateUtil.fill(pathTemp, pathTempParams, true);
         StringUtils.removeStart(filePath, "/");
-        if (!ReUtil.isMatch("^(?!\\/)(.*\\/)(.+?)\\.([^\\/]+)$", filePath)) {
+        if (!ReUtil.isMatch("^(?!\\/)([^\\.]+\\/)?([^(\\.|\\/)]+?)\\.([^\\/]+)$", filePath)) {
             throw new Exception(MessageFormat.format("非标准文件路径格式,path:{0}", filePath));
         }
         return putObject(bucketName, filePath, fileName);
