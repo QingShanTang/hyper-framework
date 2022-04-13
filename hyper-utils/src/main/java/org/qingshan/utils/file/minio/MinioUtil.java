@@ -6,14 +6,17 @@ import io.minio.http.Method;
 import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.qingshan.utils.json.JSONUtil;
 import org.qingshan.utils.string.StringTemplateUtil;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
@@ -129,14 +132,98 @@ public class MinioUtil {
     public ObjectWriteResponse putObject(String bucketName,
                                          String pathTemp,
                                          Map<String, String> pathTempParams,
+                                         boolean checkExist,
                                          String fileName
     ) throws Exception {
         String filePath = StringTemplateUtil.fill(pathTemp, pathTempParams, true);
-        StringUtils.removeStart(filePath, "/");
-        if (!ReUtil.isMatch("^(?!\\/)([^\\.]+\\/)?([^(\\.|\\/)]+?)\\.([^\\/]+)$", filePath)) {
+        filePath = StringUtils.removeStart(filePath, "/");
+        if (!ReUtil.isMatch("^(?!\\/)(.+\\/)?([^(\\.|\\/)]+?)\\.([^\\/]+)$", filePath)) {
             throw new Exception(MessageFormat.format("非标准文件路径格式,path:{0}", filePath));
         }
+        if (checkExist && ifObjectExist(bucketName, filePath)) {
+            throw new Exception("该对象已存在,谨慎操作!objectName:" + filePath);
+        }
         return putObject(bucketName, filePath, fileName);
+    }
+
+    public List<ObjectWriteResponse> putObjects(String bucketName,
+                                                String pathTemp,
+                                                Map<String, String> pathTempParams,
+                                                boolean checkExist,
+                                                String... path
+    ) throws Exception {
+        List<ObjectWriteResponse> responseList = new ArrayList<>();
+        String folderPath = StringTemplateUtil.fill(pathTemp, pathTempParams, true);
+        folderPath = StringUtils.removeStart(folderPath, "/");
+        String finalFolderPath = StringUtils.appendIfMissing(folderPath, "/", "/");
+        if (!ReUtil.isMatch("^(?!\\/)(.+\\/)$", finalFolderPath)) {
+            throw new Exception(MessageFormat.format("非标准文件夹路径格式,path:{0}", finalFolderPath));
+        }
+        //扫描文件列表
+        List<File> fileList = scanFiles(path);
+        if (checkExist && ifObjectsExist(bucketName, fileList.stream().map(file -> finalFolderPath + file.getName()).toArray(String[]::new))) {
+            throw new Exception("对象已存在,谨慎操作!");
+        }
+        for (File file : fileList) {
+            responseList.add(putObject(bucketName, finalFolderPath + file.getName(), file.getAbsolutePath()));
+        }
+        return responseList;
+    }
+
+    /**
+     * 检查对象是否存在
+     *
+     * @param bucketName
+     * @param objectNames
+     * @return
+     */
+    private boolean ifObjectsExist(String bucketName, String... objectNames) {
+        log.info("检查对象是否存在...");
+        List<String> existObj = new ArrayList<>();
+        if (ArrayUtils.isNotEmpty(objectNames)) {
+            for (String path : objectNames) {
+                if (ifObjectExist(bucketName, path)) {
+                    existObj.add(path);
+                }
+            }
+        }
+        if (CollectionUtils.isEmpty(existObj)) {
+            log.info("无已存在对象");
+            return false;
+        } else {
+            log.info("以下对象已存在,existObj:{}", JSONUtil.toJSONString(existObj));
+            return true;
+        }
+    }
+
+
+    /**
+     * 扫描文件列表
+     *
+     * @param paths
+     * @return
+     * @throws Exception
+     */
+    private List<File> scanFiles(String... paths) throws Exception {
+        log.info("扫描文件列表...");
+        List<File> fileList = new ArrayList<>();
+        if (ArrayUtils.isNotEmpty(paths)) {
+            for (String path : paths) {
+                File file = new File(path);
+                if (!file.exists()) {
+                    log.info("该路径不存在,path:{}", path);
+                    throw new Exception("该路径不存在,path:" + path);
+                }
+                if (file.isFile()) {
+                    fileList.add(file);
+                } else if (file.isDirectory()) {
+                    Collection<File> files = FileUtils.listFiles(file, null, false);
+                    fileList.addAll(files);
+                }
+            }
+        }
+        log.info("扫描文件列表结束,fileList:{}", JSONUtil.toJSONString(fileList.stream().map(file -> file.getAbsolutePath()).toArray()));
+        return fileList;
     }
 
     /**
@@ -202,7 +289,7 @@ public class MinioUtil {
      */
     public Map<String, InputStream> listObjects(String bucketName, String prefix, boolean recursive) throws Exception {
         if (StringUtils.startsWith(prefix, "/")) {
-            StringUtils.removeStart(prefix, "/");
+            prefix = StringUtils.removeStart(prefix, "/");
         }
         Map<String, InputStream> objects = new HashMap<>();
         Iterable<Result<Item>> results = minioClient.listObjects(
