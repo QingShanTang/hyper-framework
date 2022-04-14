@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 public class ClassScanUtil {
     public static List<Class> scan(
             String className,
+            boolean fuzzy,
             String[] excludeResources,
             String... basePackages
     ) {
@@ -61,7 +62,14 @@ public class ClassScanUtil {
 
             Set<Class<?>> scanedClass = reflections.getSubTypesOf(Object.class);
             scanedClass.forEach(item -> {
-                if (ReUtil.isMatch(MessageFormat.format("^.+\\.[^.]*{0}[^.]*$", className), item.getTypeName())) {
+                String regex;
+                if (fuzzy) {
+                    regex = "^.+\\.[^.]*{0}[^.]*$";
+                } else {
+                    regex = "^.+\\.{0}$";
+                }
+
+                if (ReUtil.isMatch(MessageFormat.format(regex, className), item.getTypeName())) {
                     targetList.add(item);
                 }
             });
@@ -81,6 +89,6 @@ public class ClassScanUtil {
     }
 
     public static void main(String[] args) {
-        ClassScanUtil.scan("Class", null, "org.qingshan");
+        ClassScanUtil.scan("ClassTypeUtil", false, null, "org.qingshan");
     }
 }
