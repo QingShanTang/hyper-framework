@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+/**
+ * 根据类名扫描
+ */
 @Slf4j
 public class ClassScanUtil {
     public static List<Class> scan(

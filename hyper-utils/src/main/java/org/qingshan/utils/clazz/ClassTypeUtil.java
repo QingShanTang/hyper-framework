@@ -10,6 +10,9 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.*;
 
+/**
+ * 类信息
+ */
 @Slf4j
 public class ClassTypeUtil {
     /**
