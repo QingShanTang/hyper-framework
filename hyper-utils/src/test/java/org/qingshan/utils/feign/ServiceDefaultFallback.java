@@ -12,7 +12,7 @@ public class ServiceDefaultFallback implements FallbackFactory<WebService> {
         return new WebService() {
             @Override
             public MockCallResult call(MockCallContext params) {
-                log.error("远程调用失败,errorMsg->{}", throwable);
+                log.error("远程调用失败,errorMsg->{}", throwable.getLocalizedMessage());
                 MockCallResult result = new MockCallResult();
                 result.setResult(false);
                 result.setData("hystrix降级");

@@ -6,7 +6,7 @@ import org.qingshan.pojo.web.MockCallContext;
 import org.qingshan.pojo.web.MockCallResult;
 
 public interface WebService {
-    @RequestLine("POST /hyper/api/mock")
+    @RequestLine("POST /hyper/api/mock/call")
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     MockCallResult call(MockCallContext params);
 }

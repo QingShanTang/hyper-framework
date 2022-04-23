@@ -10,46 +10,70 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import static org.qingshan.utils.feign.FeignConstant.defaultConfigPath;
+
 /**
  * feign service工厂类
  */
 @Slf4j
 public class FeignServiceFactory {
-    private static final String defaultConfigPath = "config/default/feign.properties";
-
-    private FeignProperties configProperties;
 
     /**
-     * feign ribbon hystrix 配置文件路径
+     * 加载默认配置文件
+     */
+    static {
+        log.info("加载Feign默认配置,defaultConfigPath:{}", defaultConfigPath);
+        try (InputStream defaultConfig = FeignServiceFactory.class.getClassLoader().getResourceAsStream(defaultConfigPath)) {
+            if (null != defaultConfig) {
+                Properties defaultProperties = new Properties() {{
+                    load(defaultConfig);
+                }};
+                log.info("defaultProperties:{}", JSONUtil.toJSONString(defaultProperties));
+                config(defaultProperties);
+            } else {
+                log.warn("无默认配置!");
+            }
+        } catch (IOException e) {
+            log.error("加载Feign默认配置异常!errorMsg->", e);
+        }
+    }
+
+    /**
+     * 初始化自定义配置
      *
      * @param configProperties
      */
-    public FeignServiceFactory(FeignProperties configProperties) {
-        this.configProperties = configProperties;
+    public static void customConfig(FeignProperties configProperties) {
+        log.info("加载Feign自定义配置,configProperties:{}", JSONUtil.toJSONString(configProperties));
         try {
-            Properties properties = new Properties();
-            //先加载默认的配置文件
-            try (InputStream defaultConfig = this.getClass().getClassLoader().getResourceAsStream(defaultConfigPath)) {
-                if (null != defaultConfig) {
-                    properties.load(defaultConfig);
-                } else {
-                    log.warn("无默认配置!");
-                }
-            }
-            //如果存在客户配置,则覆盖默认配置的属性
+            Properties customProperties = new Properties();
+            //加载自定义文件配置
             if (StringUtils.isNotBlank(configProperties.getConfigPath())) {
-                try (InputStream customConfig = this.getClass().getClassLoader().getResourceAsStream(configProperties.getConfigPath())) {
-                    properties.load(customConfig);
+                try (InputStream customConfig = FeignServiceFactory.class.getClassLoader().getResourceAsStream(configProperties.getConfigPath())) {
+                    customProperties.load(customConfig);
                 }
             }
-            //如果存在properties注入属性，则覆盖以上配置
-            properties.putAll(configProperties.getConfigProperties());
-            log.info("加载feign配置信息成功,feignProperties->{}", JSONUtil.toJSONString(properties));
-            ConfigurationManager.loadProperties(properties);
+            //如果存在properties注入属性，则覆盖自定义文件配置
+            customProperties.putAll(configProperties.getConfigProperties());
+            log.info("加载Feign自定义配置成功,customProperties->{}", JSONUtil.toJSONString(customProperties));
+            config(customProperties);
         } catch (IOException e) {
-            log.error("Abnormal reading of Feign configuration file,errorMsg->{}", e);
+            log.error("Abnormal reading of Feign configuration file,errorMsg->", e);
             throw new RuntimeException("Abnormal reading of Feign configuration file,errorMsg->" + e.getLocalizedMessage());
         }
+    }
+
+    /**
+     * 加载配置
+     *
+     * @param properties
+     */
+    public static void config(Properties properties) {
+        log.info("加载Feign配置,properties:{}", JSONUtil.toJSONString(properties));
+        ConfigurationManager.loadProperties(properties);
+        FeignConstant.serviceContainer.forEach((key, value) -> {
+            buildService(value.getClientName(), value.getClazz(), value.getFallbackFactory());
+        });
     }
 
 
@@ -59,11 +83,13 @@ public class FeignServiceFactory {
      * @param fallbackFactory 自定义降级方法
      * @return
      */
-    public <T> T buildService(
+    public static <T> T buildService(
             String clientName,
             Class<T> serviceClazz,
             FallbackFactory<T> fallbackFactory
     ) {
-        return FeignServiceBuilder.buildFeignServiceWithRibbonAndHystrix(clientName, serviceClazz, fallbackFactory);
+        T t = FeignServiceBuilder.buildFeignServiceWithRibbonAndHystrix(clientName, serviceClazz, fallbackFactory);
+        FeignConstant.serviceContainer.put(serviceClazz, new FeignServicePOJO(t, clientName, serviceClazz, fallbackFactory));
+        return t;
     }
 }

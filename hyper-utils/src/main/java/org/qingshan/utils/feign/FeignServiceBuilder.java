@@ -20,7 +20,7 @@ import java.text.MessageFormat;
  */
 @Slf4j
 public class FeignServiceBuilder {
-    public static <T> T buildFeignServiceWithRibbonAndHystrix(String clientName, Class<T> t, FallbackFactory<T> fallbackFactory) {
+    protected static <T> T buildFeignServiceWithRibbonAndHystrix(String clientName, Class<T> t, FallbackFactory<T> fallbackFactory) {
         //如果配置了连接超时和读写超时,要另外配置
         IClientConfig config = ClientFactory.getNamedConfig(clientName);
         Integer connectTimeout = config.getPropertyAsInteger(CommonClientConfigKey.ConnectTimeout, 10000);
@@ -30,7 +30,7 @@ public class FeignServiceBuilder {
                     .client(RibbonClient.create())
                     .encoder(new JacksonEncoder())
                     .decoder(new JacksonDecoder())
-                    .retryer(Retryer.NEVER_RETRY)//如果不关闭,ribbon重试机制外面还会套一层feign重试机制
+                    .retryer(Retryer.NEVER_RETRY)//如果不关闭,ribbon重试机制里面还会套一层feign重试机制
                     .options(new Request.Options(connectTimeout, readTimeout))
                     .target(t, MessageFormat.format("http://{0}", clientName));
             return service;
@@ -39,7 +39,7 @@ public class FeignServiceBuilder {
                     .client(RibbonClient.create())
                     .encoder(new JacksonEncoder())
                     .decoder(new JacksonDecoder())
-                    .retryer(Retryer.NEVER_RETRY)//如果不关闭,ribbon重试机制外面还会套一层feign重试机制
+                    .retryer(Retryer.NEVER_RETRY)//如果不关闭,ribbon重试机制里面还会套一层feign重试机制
                     .options(new Request.Options(connectTimeout, readTimeout))
                     .target(t, MessageFormat.format("http://{0}", clientName), fallbackFactory);
             return service;
