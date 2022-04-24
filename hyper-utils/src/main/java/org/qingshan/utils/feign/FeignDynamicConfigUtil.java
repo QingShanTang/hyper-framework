@@ -29,6 +29,7 @@ public class FeignDynamicConfigUtil {
             setProperty(clientName + "." + "ribbon.listOfServers", String.join(FeignConstant.COMMA_SEPARATOR, listOfServers));
         }};
         FeignServiceFactory.config(properties);
+        FeignUtil.updateListOfServers(clientName);
         log.info("配置算法服务列表成功");
         return true;
     }

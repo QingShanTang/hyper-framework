@@ -18,7 +18,7 @@ minio:
   endpoint: http://127.0.0.1:9078
   accesskey: geekplus
   secretkey: geekplus
-  buckets: heihei1,heihei2
+#  buckets: heihei1,heihei2
 
 #将sql信息打印到控制台
 mybatis-plus:
