@@ -6,6 +6,8 @@ import org.qingshan.utils.json.JSONUtil;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
+import java.util.Date;
+
 /**
  * Quartz工具类
  *
@@ -307,6 +309,22 @@ public class QuartzUtil {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 根据cron表达式获取下次执行时间
+     *
+     * @param cronExpression
+     * @return
+     * @throws Exception
+     */
+    public Date getNextFireDate(String cronExpression) throws Exception {
+        if (!CronExpression.isValidExpression(cronExpression)) {
+            throw new Exception("无效cron表达式!");
+        }
+        CronExpression cron = new CronExpression(cronExpression);
+        Date nextFireDate = cron.getNextValidTimeAfter(new Date());
+        return nextFireDate;
     }
 
     /**

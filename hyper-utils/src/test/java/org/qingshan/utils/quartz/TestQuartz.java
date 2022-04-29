@@ -94,6 +94,7 @@ public class TestQuartz {
                 .build();
         quartzUtil.operateJob(bean1, QuartzEnum.JobOperateType.START);
         Thread.sleep(180000);
+        log.info("下次执行时间:{}", quartzUtil.getNextFireDate("* */10 * * * ?"));
     }
 
 }
