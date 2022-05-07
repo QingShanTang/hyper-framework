@@ -45,4 +45,15 @@ public class TestSerDes {
             Thread.sleep(2000);
         }
     }
+
+    @SneakyThrows
+    @Test
+    public void testSerDes() {
+        MockCallContext context = new MockCallContext();
+        context.setData("xixi");
+
+        SerDes serDes = SerDesUtil.getSerDesFromClazz(MockCallContext.class);
+        String serData = SerDesUtil.serResult2Str(serDes.serialize(context));
+        log.info("{}", serData);
+    }
 }
