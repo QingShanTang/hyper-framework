@@ -1,8 +1,17 @@
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.net.URL;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
-public class AnnotationScannerUtils {
-    private static final Logger logger = LoggerFactory.getLogger(AnnotationScannerUtils.class);
+@Slf4j
+public class NativeAnnotationScanUtil {
     private static final String EXT = "class
 
     /**
@@ -33,7 +42,7 @@ public class AnnotationScannerUtils {
             try {
                 classesSet.add(getClassObj(curFile, pkgPath, pkgName));
             } catch (ClassNotFoundException e) {
-                logger.error("load class fail", e);
+                log.error("load class fail", e);
             }
         }
 
@@ -66,7 +75,7 @@ public class AnnotationScannerUtils {
                     }
                 }
             } catch (ClassNotFoundException e) {
-                logger.error("load class fail", e);
+                log.error("load class fail", e);
             }
         }
 
@@ -100,7 +109,7 @@ public class AnnotationScannerUtils {
         File fPkgDir = new File(pkgPath);
 
         if (!(fPkgDir.exists() && fPkgDir.isDirectory())){
-            logger.error("the directory to package is empty: {}", pkgPath);
+            log.error("the directory to package is empty: {}", pkgPath);
 
             return null;
         }
