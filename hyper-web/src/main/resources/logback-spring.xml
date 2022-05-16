@@ -3,6 +3,8 @@
     <!-- 存放路径 -->
     <springProperty scope="context" name="log.path" source="hyper.logging.home"
                     defaultValue="${user.home}/hyper/logs"/>
+    <springProperty scope="context" name="env" source="spring.profiles.active"
+                    defaultValue="prod"/>
 
     <!-- 普通输出格式 -->
     <property name="log.pattern"
@@ -68,7 +70,11 @@
 
     <!--系统操作日志-->
     <root level="info">
-        <appender-ref ref="console"/>
+        <if condition='property("env").contains("dev")'>
+            <then>
+                <appender-ref ref="console"/>
+            </then>
+        </if>
         <appender-ref ref="RollingFile"/>
         <appender-ref ref="RollingFileError"/>
     </root>
