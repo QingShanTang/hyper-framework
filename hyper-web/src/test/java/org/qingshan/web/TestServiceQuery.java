@@ -2,6 +2,7 @@ package org.qingshan.web;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.qingshan.web.utils.serviceQuery.MyServiceAnno;
 import org.qingshan.web.utils.serviceQuery.ServiceQuerier;
 import org.qingshan.web.utils.serviceQuery.myService.MyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +20,20 @@ public class TestServiceQuery {
 
     @Test
     public void getAllService() {
-        Map<String, MyService> services = serviceQuerier.getAllService(MyService.class);
+        Map<String, MyService> services = serviceQuerier.getServiceAllImpl(MyService.class);
         System.out.println("1");
     }
 
 
     @Test
     public void getService() {
-        MyService service = serviceQuerier.getService(MyService.class, "myServiceImpl1");
+        MyService service = serviceQuerier.getServiceImplByKey(MyService.class, "myServiceImpl1");
+        System.out.println("1");
+    }
+
+    @Test
+    public void getServiceTypeList() {
+        Map<String, String> typeList = serviceQuerier.getServiceTypeList(MyService.class, MyServiceAnno.class);
         System.out.println("1");
     }
 }

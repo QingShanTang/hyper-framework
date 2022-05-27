@@ -1,7 +1,7 @@
 package org.qingshan.web.utils.serviceQuery.myService;
 
-import org.springframework.stereotype.Service;
+import org.qingshan.web.utils.serviceQuery.MyServiceAnno;
 
-@Service("myServiceImpl2")
+@MyServiceAnno(key = "myServiceImpl2", desc = "实现2")
 public class MyServiceImpl2 implements MyService {
 }
