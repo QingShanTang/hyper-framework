@@ -2,7 +2,7 @@ hyper:
   sqlite:
     home: ${user.home}/hyper/${hyper.env}
 mybatis-plus:
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath:mapper/*/*.xml
   type-aliases-package: org.qingshan.dao.entity
   #开启驼峰命名
   configuration:

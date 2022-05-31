@@ -17,7 +17,7 @@
             `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
             `username` varchar(255) DEFAULT NULL COMMENT '用户名',
             `password` varchar(255) DEFAULT NULL COMMENT '密码',
-            `income` double(255,0) DEFAULT NULL COMMENT '收入',
+            `income` double(255,2) DEFAULT NULL COMMENT '收入',
             `if_adult` int(1) DEFAULT NULL COMMENT '是否成年(1:成年 0:未成年)',
             `created_by` varchar(20) DEFAULT NULL,
             `created_date` bigint(20) DEFAULT NULL,
