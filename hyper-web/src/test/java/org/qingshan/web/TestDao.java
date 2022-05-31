@@ -27,6 +27,11 @@ public class TestDao {
         xixi.setPassword("123");
         xixi.setIncome(1.1);
         xixi.setIfAdult(1);
+        //list需要手动插入基本信息
+        xixi.setCreatedBy("admin");
+        xixi.setCreatedDate(System.currentTimeMillis());
+        xixi.setLastModifiedBy("admin");
+        xixi.setLastModifiedDate(System.currentTimeMillis());
         User haha = new User();
         haha.setUsername("haha");
         haha.setPassword("456");

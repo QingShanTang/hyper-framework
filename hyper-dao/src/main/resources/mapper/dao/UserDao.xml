@@ -7,7 +7,11 @@
         username,
         password,
         income,
-        if_adult
+        if_adult,
+        created_by,
+        created_date,
+        last_modified_by,
+        last_modified_date
         )
         values
         <foreach collection="list" item="item" index="index" separator=",">
@@ -15,7 +19,11 @@
             #{item.username,jdbcType=VARCHAR},
             #{item.password,jdbcType=VARCHAR},
             #{item.income,jdbcType=DOUBLE},
-            #{item.ifAdult,jdbcType=INTEGER}
+            #{item.ifAdult,jdbcType=INTEGER},
+            #{item.createdBy,jdbcType=VARCHAR},
+            #{item.createdDate,jdbcType=BIGINT},
+            #{item.lastModifiedBy,jdbcType=VARCHAR},
+            #{item.lastModifiedDate,jdbcType=BIGINT}
             )
         </foreach>
     </insert>
