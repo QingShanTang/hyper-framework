@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @SpringBootTest
@@ -38,5 +39,7 @@ public class TestDao {
         haha.setIncome(2.2);
         haha.setIfAdult(0);
         userDao.batchAdd(Arrays.asList(xixi, haha));
+        userDao.batchAdd(null);
+        userDao.batchAdd(new ArrayList<>());
     }
 }
