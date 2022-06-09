@@ -2,6 +2,9 @@ package org.qingshan.utils.clazz;
 
 import java.lang.reflect.Modifier;
 
+/**
+ * java类工具
+ */
 public class ClassUtil {
     /**
      * 获取类型访问标志
