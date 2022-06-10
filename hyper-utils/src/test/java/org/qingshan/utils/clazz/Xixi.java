@@ -9,6 +9,9 @@ import java.util.Map;
 public class Xixi {
     private String x1;
     private String[] x2;
-    private List<String> x3;
-    private Map<String,Haha> x4;
+    private String[][] x3;
+    private List<String> x4;
+    private Map<String,Haha> x5;
+    private Haha x6;
+    private Xixi x7;
 }

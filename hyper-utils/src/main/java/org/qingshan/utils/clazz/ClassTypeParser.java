@@ -18,12 +18,12 @@ public class ClassTypeParser {
     /**
      * 记录已解析类型,防止循环引用导致栈溢出
      */
-    private final Map<String, Map<String, Object>> resolvedTypeMap = new HashMap<>();
+    private final Map<String, Object> resolvedTypeMap = new HashMap<>();
 
     /**
      * 解析结果
      */
-    private Map<String, Object> typeInfo = new HashMap<>();
+    private Object typeInfo;
     /**
      * 基本类型
      */
@@ -41,11 +41,11 @@ public class ClassTypeParser {
         this.typeInfo = getTypeInfo(clazz);
     }
 
-    public Map<String, Map<String, Object>> getResolvedTypeMap() {
+    public Map<String, Object> getResolvedTypeMap() {
         return resolvedTypeMap;
     }
 
-    public Map<String, Object> getTypeInfo() {
+    public Object getTypeInfo() {
         return typeInfo;
     }
 
@@ -55,7 +55,7 @@ public class ClassTypeParser {
      * @param clazz
      * @return
      */
-    private Map<String, Object> getTypeInfo(Class<?> clazz) {
+    private Object getTypeInfo(Class<?> clazz) {
         if (null != resolvedTypeMap.get(clazz.getName())) {
             return resolvedTypeMap.get(clazz.getName());
         }
@@ -63,8 +63,13 @@ public class ClassTypeParser {
         HashMap<String, Object> map = new HashMap<>();
 
         //如果是基础类型，那么直接返回该类型信息,否则解析类型内部信息
-        resolvedTypeMap.put(clazz.getTypeName(), map);
-        return getFieldsInfo(clazz, map);
+        if (isBaseType(clazz)) {
+            resolvedTypeMap.put(clazz.getTypeName(), clazz.getTypeName());
+            return clazz.getTypeName();
+        } else {
+            resolvedTypeMap.put(clazz.getTypeName(), map);
+            return getFieldsInfo(clazz, map);
+        }
     }
 
 
