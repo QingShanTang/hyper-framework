@@ -93,9 +93,11 @@ public class ClassTypeParser {
                 map.put(fieldName, getArrayType(field));
             } else if (isCollectionType(type)) {
                 // 集合
+                getTypeInfo(field.getType());
                 map.put(fieldName, getCollectionType(field));
             } else if (isMapType(type)) {
                 // map
+                getTypeInfo(field.getType());
                 map.put(fieldName, getMapType(field));
             } else {
                 // 基础类型或自定义
@@ -237,12 +239,6 @@ public class ClassTypeParser {
     private static Set<String> getMapTypeSet() {
         Class[] types = {Map.class, HashMap.class};
         return Arrays.asList(types).stream().map(Class::getName).collect(Collectors.toSet());
-    }
-
-    public static void main(String[] args) {
-        //如果存在循环引用打印的时候会栈溢出，需要用fastjson打印
-        ClassTypeParser parser = new ClassTypeParser(int.class);
-        System.out.println();
     }
 }
 
