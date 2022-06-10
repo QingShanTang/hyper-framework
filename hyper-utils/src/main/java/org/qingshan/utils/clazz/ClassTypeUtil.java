@@ -1,7 +1,7 @@
 package org.qingshan.utils.clazz;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import org.qingshan.utils.json.JSONUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -19,7 +19,7 @@ public class ClassTypeUtil {
     /**
      * 记录已解析类型,防止循环引用导致栈溢出
      */
-    private static final ThreadLocal<Map<String, Map<String, Object>>> resolvedTypeMap = new ThreadLocal<>();
+    private final Map<String, Object> resolvedTypeMap = new HashMap<>();
     /**
      * 基本类型
      */
@@ -33,19 +33,6 @@ public class ClassTypeUtil {
      */
     private static final Set<String> mapTypeSet = getMapTypeSet();
 
-    /**
-     * 递归获取class全字段类型信息
-     *
-     * @param clazz
-     * @return
-     */
-    public static Map<String, Object> getClazzTypeInfo(Class<?> clazz) {
-        resolvedTypeMap.set(new HashMap<>());
-        Map<String, Object> fieldInfo = getFieldsInfo(clazz);
-        resolvedTypeMap.remove();
-        return fieldInfo;
-    }
-
 
     /**
      * 获取类型的信息
@@ -53,12 +40,21 @@ public class ClassTypeUtil {
      * @param clazz
      * @return
      */
-    private static Object getTypeInfo(Class<?> clazz) {
+    private Object getTypeInfo(Class<?> clazz) {
+        if (null != resolvedTypeMap.get(clazz.getName())) {
+            return resolvedTypeMap.get(clazz.getName());
+        }
+
+        HashMap<String, Object> map = new HashMap<>();
+
         //如果是基础类型，那么直接返回该类型信息,否则解析类型内部信息
         if (isBaseType(clazz)) {
+            resolvedTypeMap.put(clazz.getTypeName(), clazz.getTypeName());
             return clazz.getTypeName();
+        } else {
+            resolvedTypeMap.put(clazz.getTypeName(), map);
+            return getFieldsInfo(clazz, map);
         }
-        return getFieldsInfo(clazz);
     }
 
 
@@ -68,12 +64,7 @@ public class ClassTypeUtil {
      * @param clazz
      * @return
      */
-    private static Map<String, Object> getFieldsInfo(Class<?> clazz) {
-        if (null != resolvedTypeMap.get().get(clazz.getName())) {
-            return resolvedTypeMap.get().get(clazz.getName());
-        }
-        HashMap<String, Object> map = new HashMap<>();
-        resolvedTypeMap.get().put(clazz.getName(), map);
+    private Map<String, Object> getFieldsInfo(Class<?> clazz, HashMap<String, Object> map) {
         Field[] fields = clazz.getDeclaredFields();
         map.put("this", clazz.getName());
         for (Field field : fields) {
@@ -99,7 +90,7 @@ public class ClassTypeUtil {
     /**
      * 数组，仅支持一维数组
      */
-    private static List<Object> getArrayType(Field field) {
+    private List<Object> getArrayType(Field field) {
         Class<?> type = field.getType();
         String typeName = type.getTypeName();
         //元素类型
@@ -124,7 +115,7 @@ public class ClassTypeUtil {
         }
     }
 
-    private static List<Object> getCollectionType(Class<?> clazz) {
+    private List<Object> getCollectionType(Class<?> clazz) {
         return Collections.singletonList(getTypeInfo(clazz));
     }
 
@@ -134,7 +125,7 @@ public class ClassTypeUtil {
      * @param field
      * @return
      */
-    private static List<Object> getCollectionType(Field field) {
+    private List<Object> getCollectionType(Field field) {
         Class<?> actualTypeClazz;
         Type genericType = field.getGenericType();
         if (genericType instanceof ParameterizedType
@@ -154,7 +145,7 @@ public class ClassTypeUtil {
      * @param field
      * @return
      */
-    private static Map<String, Object> getMapType(Field field) {
+    private Map<String, Object> getMapType(Field field) {
         HashMap<String, Object> mapTypeMap = new HashMap<>();
         Type genericType = field.getGenericType();
         if (genericType instanceof ParameterizedType) {
@@ -232,7 +223,8 @@ public class ClassTypeUtil {
 
     public static void main(String[] args) {
         //如果存在循环引用打印的时候会栈溢出，需要用fastjson打印
-        JSONUtil.printJSONStringWithFormat(getClazzTypeInfo(Xixi.class));
+        String xixi = JSON.toJSONString(new ClassTypeUtil().getTypeInfo(int.class));
+        System.out.println(xixi);
     }
 }
 
