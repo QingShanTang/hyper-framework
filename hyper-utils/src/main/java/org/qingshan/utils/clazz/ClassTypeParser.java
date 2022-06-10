@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
  * 类信息
  */
 @Slf4j
-public class ClassTypeUtil {
+public class ClassTypeParser {
     /**
      * 记录已解析类型,防止循环引用导致栈溢出
      */
-    private final Map<String, Object> resolvedTypeMap = new HashMap<>();
+    private final Map<String, Map<String, Object>> resolvedTypeMap = new HashMap<>();
     /**
      * 基本类型
      */
@@ -40,7 +40,7 @@ public class ClassTypeUtil {
      * @param clazz
      * @return
      */
-    private Object getTypeInfo(Class<?> clazz) {
+    private Map<String, Object> getTypeInfo(Class<?> clazz) {
         if (null != resolvedTypeMap.get(clazz.getName())) {
             return resolvedTypeMap.get(clazz.getName());
         }
@@ -48,13 +48,8 @@ public class ClassTypeUtil {
         HashMap<String, Object> map = new HashMap<>();
 
         //如果是基础类型，那么直接返回该类型信息,否则解析类型内部信息
-        if (isBaseType(clazz)) {
-            resolvedTypeMap.put(clazz.getTypeName(), clazz.getTypeName());
-            return clazz.getTypeName();
-        } else {
-            resolvedTypeMap.put(clazz.getTypeName(), map);
-            return getFieldsInfo(clazz, map);
-        }
+        resolvedTypeMap.put(clazz.getTypeName(), map);
+        return getFieldsInfo(clazz, map);
     }
 
 
@@ -67,6 +62,9 @@ public class ClassTypeUtil {
     private Map<String, Object> getFieldsInfo(Class<?> clazz, HashMap<String, Object> map) {
         Field[] fields = clazz.getDeclaredFields();
         map.put("this", clazz.getName());
+        if (isBaseType(clazz)) {
+            return map;
+        }
         for (Field field : fields) {
             Class<?> type = field.getType();
             String fieldName = field.getName();
@@ -223,7 +221,8 @@ public class ClassTypeUtil {
 
     public static void main(String[] args) {
         //如果存在循环引用打印的时候会栈溢出，需要用fastjson打印
-        String xixi = JSON.toJSONString(new ClassTypeUtil().getTypeInfo(int.class));
+        ClassTypeParser util = new ClassTypeParser();
+        String xixi = JSON.toJSONString(util.getTypeInfo(int.class));
         System.out.println(xixi);
     }
 }
