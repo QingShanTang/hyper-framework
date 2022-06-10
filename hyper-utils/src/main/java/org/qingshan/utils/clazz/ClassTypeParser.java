@@ -1,6 +1,5 @@
 package org.qingshan.utils.clazz;
 
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
@@ -20,6 +19,11 @@ public class ClassTypeParser {
      * 记录已解析类型,防止循环引用导致栈溢出
      */
     private final Map<String, Map<String, Object>> resolvedTypeMap = new HashMap<>();
+
+    /**
+     * 解析结果
+     */
+    private Map<String, Object> typeInfo = new HashMap<>();
     /**
      * 基本类型
      */
@@ -33,6 +37,17 @@ public class ClassTypeParser {
      */
     private static final Set<String> mapTypeSet = getMapTypeSet();
 
+    public ClassTypeParser(Class<?> clazz) {
+        this.typeInfo = getTypeInfo(clazz);
+    }
+
+    public Map<String, Map<String, Object>> getResolvedTypeMap() {
+        return resolvedTypeMap;
+    }
+
+    public Map<String, Object> getTypeInfo() {
+        return typeInfo;
+    }
 
     /**
      * 获取类型的信息
@@ -221,9 +236,8 @@ public class ClassTypeParser {
 
     public static void main(String[] args) {
         //如果存在循环引用打印的时候会栈溢出，需要用fastjson打印
-        ClassTypeParser util = new ClassTypeParser();
-        String xixi = JSON.toJSONString(util.getTypeInfo(int.class));
-        System.out.println(xixi);
+        ClassTypeParser parser = new ClassTypeParser(int.class);
+        System.out.println();
     }
 }
 
