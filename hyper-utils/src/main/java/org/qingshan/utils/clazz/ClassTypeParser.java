@@ -18,7 +18,7 @@ public class ClassTypeParser {
     /**
      * 记录已解析类型,防止循环引用导致栈溢出
      */
-    private final Map<String, Object> resolvedTypeMap = new HashMap<>();
+    private final Map<Class, Object> resolvedTypeMap = new HashMap<>();
 
     /**
      * 解析结果
@@ -31,17 +31,17 @@ public class ClassTypeParser {
     /**
      * 集合类型
      */
-    private static final Set<String> collectionTypeSet = getCollectionTypeSet();
+    private static final Set<Class> collectionTypeSet = getCollectionTypeSet();
     /**
      * map类型
      */
-    private static final Set<String> mapTypeSet = getMapTypeSet();
+    private static final Set<Class> mapTypeSet = getMapTypeSet();
 
     public ClassTypeParser(Class<?> clazz) {
         this.typeInfo = getTypeInfo(clazz);
     }
 
-    public Map<String, Object> getResolvedTypeMap() {
+    public Map<Class, Object> getResolvedTypeMap() {
         return resolvedTypeMap;
     }
 
@@ -56,18 +56,18 @@ public class ClassTypeParser {
      * @return
      */
     private Object getTypeInfo(Class<?> clazz) {
-        if (null != resolvedTypeMap.get(clazz.getName())) {
-            return resolvedTypeMap.get(clazz.getName());
+        if (null != resolvedTypeMap.get(clazz)) {
+            return resolvedTypeMap.get(clazz);
         }
 
         HashMap<String, Object> map = new HashMap<>();
 
         //如果是基础类型，那么直接返回该类型信息,否则解析类型内部信息
         if (isBaseType(clazz)) {
-            resolvedTypeMap.put(clazz.getTypeName(), clazz.getTypeName());
+            resolvedTypeMap.put(clazz, clazz.getTypeName());
             return clazz.getTypeName();
         } else {
-            resolvedTypeMap.put(clazz.getTypeName(), map);
+            resolvedTypeMap.put(clazz, map);
             return getFieldsInfo(clazz, map);
         }
     }
@@ -192,11 +192,11 @@ public class ClassTypeParser {
     }
 
     private static boolean isMapType(Class<?> clazz) {
-        return mapTypeSet.contains(clazz.getName());
+        return mapTypeSet.contains(clazz);
     }
 
     private static boolean isCollectionType(Class<?> clazz) {
-        return collectionTypeSet.contains(clazz.getName());
+        return collectionTypeSet.contains(clazz);
     }
 
     private static Class isBaseType(String clazzType) {
@@ -226,9 +226,9 @@ public class ClassTypeParser {
      *
      * @return
      */
-    private static Set<String> getCollectionTypeSet() {
+    private static Set<Class> getCollectionTypeSet() {
         Class[] types = {List.class, Set.class, ArrayList.class, HashSet.class};
-        return Arrays.asList(types).stream().map(Class::getName).collect(Collectors.toSet());
+        return Arrays.asList(types).stream().collect(Collectors.toSet());
     }
 
     /**
@@ -236,9 +236,9 @@ public class ClassTypeParser {
      *
      * @return
      */
-    private static Set<String> getMapTypeSet() {
+    private static Set<Class> getMapTypeSet() {
         Class[] types = {Map.class, HashMap.class};
-        return Arrays.asList(types).stream().map(Class::getName).collect(Collectors.toSet());
+        return Arrays.asList(types).stream().collect(Collectors.toSet());
     }
 }
 
