@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * 类信息
+ * java类字段信息解析工具
  */
 @Slf4j
 public class ClassTypeParser {
