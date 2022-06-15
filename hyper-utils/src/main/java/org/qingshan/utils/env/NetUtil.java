@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -18,13 +19,34 @@ public class NetUtil {
 
     public static List<String> macs;
 
+    public static String hostname;
+
     static {
         try {
             macs = getMacList();
         } catch (Exception e) {
             log.error("获取mac地址失败,errorMsg->", e);
         }
+        try {
+            hostname = getHostname();
+        } catch (UnknownHostException e) {
+            log.error("获取hostname失败,errorMsg->", e);
+        }
     }
+
+    /**
+     * 获取主机名
+     *
+     * @return
+     * @throws UnknownHostException
+     */
+    private static String getHostname() throws UnknownHostException {
+        log.info("获取hostname...");
+        String hostname = InetAddress.getLocalHost().getHostName();
+        log.info("hostname:{}", hostname);
+        return hostname;
+    }
+
 
     /**
      * 获取mac地址
