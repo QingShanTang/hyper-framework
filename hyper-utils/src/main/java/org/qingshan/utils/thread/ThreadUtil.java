@@ -12,13 +12,13 @@ public class ThreadUtil {
      * @param id
      */
     public static void interrupteThreadById(Long id) {
+        log.info("Interrupte thread,threadId:{}", id);
         Thread thread = ThreadUtils.findThreadById(id);
         if (null != thread) {
             thread.interrupt();
+            log.info("Interrupted thread succeeded");
+        } else {
+            log.warn("This thread does not exist,threadId:{}", id);
         }
-    }
-
-    public static void main(String[] args) {
-        interrupteThreadById(123L);
     }
 }
